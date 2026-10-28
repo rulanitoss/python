@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101820">
+<title>Entrar — Controle Remoto</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="login-body">
+<main class="login-card">
+  <div class="logo">🎛️</div>
+  <h1>Controle Remoto</h1>
+  <p class="muted">Introduz o PIN apresentado no computador.</p>
+  {% if error %}<div class="error">{{ error }}</div>{% endif %}
+  <form method="post">
+    <label for="pin">PIN de acesso</label>
+    <input id="pin" name="pin" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required autofocus>
+    <button class="primary wide" type="submit">Ligar ao computador</button>
+  </form>
+  <p class="tiny">Só utilizes esta interface numa rede de confiança.</p>
+</main>
+</body></html>

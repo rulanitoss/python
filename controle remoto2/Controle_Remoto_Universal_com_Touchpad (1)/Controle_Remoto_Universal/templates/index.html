@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#101820">
+<title>Controle Remoto Universal</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="brand-icon">🎛️</span><div><h1>Controle Remoto</h1><p>O teu PC, na palma da mão</p></div></div>
+  <form method="post" action="/logout"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="ghost small" type="submit">Sair</button></form>
+</header>
+<main class="layout">
+  <section class="remote panel">
+    <div class="section-head"><span>COMANDO UNIVERSAL</span><span class="live-dot"></span></div>
+    <div class="power-row">
+      <button class="remote-btn danger" data-action="lock" aria-label="Bloquear computador">⏻</button>
+      <button class="remote-btn" data-action="start" aria-label="Menu Iniciar">⌂</button>
+    </div>
+    <div class="volume-row">
+      <button class="remote-btn" data-action="volumemute">🔇</button>
+      <button class="remote-btn" data-action="volumedown">−</button>
+      <button class="remote-btn" data-action="volumeup">＋</button>
+    </div>
+    <div class="media-row">
+      <button class="remote-btn" data-action="prevtrack">⏮</button>
+      <button class="remote-btn" data-action="playpause">⏯</button>
+      <button class="remote-btn" data-action="nexttrack">⏭</button>
+    </div>
+    <div class="dpad">
+      <button class="dpad-up" data-action="up" aria-label="Cima">▲</button>
+      <button class="dpad-left" data-action="left" aria-label="Esquerda">◀</button>
+      <button class="dpad-ok" data-action="enter">OK</button>
+      <button class="dpad-right" data-action="right" aria-label="Direita">▶</button>
+      <button class="dpad-down" data-action="down" aria-label="Baixo">▼</button>
+    </div>
+    <div class="bottom-remote">
+      <button class="remote-btn" data-action="esc">↩ Voltar</button>
+      <button class="remote-btn" data-action="tab">☰ Tab</button>
+      <button class="remote-btn" data-action="space">␣ Espaço</button>
+    </div>
+    <p class="hint">Os botões enviam comandos ao computador. Para parar, fecha esta página ou termina a sessão.</p>
+    <div class="touch-section">
+      <div class="touch-title"><strong>TOUCHPAD</strong><span class="muted">Arrasta para mover a seta</span></div>
+      <div id="touchpad" class="touchpad" role="application" aria-label="Painel tátil para mover o cursor">
+        <span class="touch-cross">＋</span>
+        <span class="touch-instruction">Desliza o dedo aqui</span>
+      </div>
+      <div class="mouse-buttons">
+        <button class="remote-btn" id="leftClick">Clique esquerdo</button>
+        <button class="remote-btn" id="rightClick">Clique direito</button>
+        <button class="remote-btn" id="doubleClick">Duplo clique</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="main-panel">
+    <div class="panel welcome">
+      <div><p class="eyebrow">PAINEL DE CONTROLO</p><h2>O que queres fazer?</h2><p class="muted">Escolhe uma ação. Os comandos são executados no Windows.</p></div>
+      <div class="status-pill"><span class="live-dot"></span><span id="statusText">Ligado</span></div>
+    </div>
+    <div class="action-grid">
+      <button class="action-card" data-action="win_d"><span class="action-icon">▣</span><strong>Ambiente de trabalho</strong><small>Mostrar o desktop</small></button>
+      <button class="action-card" data-action="alt_tab"><span class="action-icon">▱</span><strong>Alternar janelas</strong><small>Alt + Tab</small></button>
+      <button class="action-card" data-action="win_e"><span class="action-icon">📁</span><strong>Explorador</strong><small>Abrir ficheiros</small></button>
+      <button class="action-card" data-action="win_s"><span class="action-icon">⌕</span><strong>Pesquisar</strong><small>Pesquisa do Windows</small></button>
+      <button class="action-card" data-action="calculator"><span class="action-icon">🧮</span><strong>Calculadora</strong><small>Abrir aplicação</small></button>
+      <button class="action-card" data-action="notepad"><span class="action-icon">📝</span><strong>Bloco de Notas</strong><small>Abrir aplicação</small></button>
+      <button class="action-card" data-action="paint"><span class="action-icon">🎨</span><strong>Paint</strong><small>Abrir aplicação</small></button>
+      <button class="action-card" data-action="keyboard"><span class="action-icon">⌨</span><strong>Teclado virtual</strong><small>Mostrar teclado</small></button>
+      <button class="action-card" data-action="screenshot"><span class="action-icon">📷</span><strong>Captura de ecrã</strong><small>Guardar imagem</small></button>
+      <button class="action-card" data-action="ctrl_c"><span class="action-icon">⧉</span><strong>Copiar</strong><small>Ctrl + C</small></button>
+      <button class="action-card" data-action="ctrl_v"><span class="action-icon">▤</span><strong>Colar</strong><small>Ctrl + V</small></button>
+      <button class="action-card" data-action="ctrl_z"><span class="action-icon">↶</span><strong>Desfazer</strong><small>Ctrl + Z</small></button>
+    </div>
+    <div class="panel keyboard-panel">
+      <div><p class="eyebrow">ATALHOS</p><h2>Teclas rápidas</h2></div>
+      <div class="shortcut-row">
+        <button class="shortcut" data-action="ctrl_a">Selecionar tudo <kbd>Ctrl+A</kbd></button>
+        <button class="shortcut" data-action="ctrl_x">Cortar <kbd>Ctrl+X</kbd></button>
+        <button class="shortcut" data-action="ctrl_y">Refazer <kbd>Ctrl+Y</kbd></button>
+        <button class="shortcut" data-action="ctrl_shift_esc">Gestor de tarefas <kbd>Ctrl+Shift+Esc</kbd></button>
+      </div>
+    </div>
+  </section>
+</main>
+<footer><span>● Sessão protegida por PIN</span><span id="toast" role="status">Pronto para receber comandos</span></footer>
+<script>
+const CSRF = {{ csrf|tojson }};
+const toast = document.getElementById("toast");
+let toastTimer;
+async function sendAction(action) {
+  toast.textContent = "A enviar comando…";
+  try {
+    const response = await fetch("/api/action", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({action, csrf: CSRF})
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Falha no comando");
+    toast.textContent = "✓ " + data.message;
+  } catch (err) {
+    toast.textContent = "Erro: " + err.message;
+  }
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.textContent = "Pronto para receber comandos", 3500);
+}
+async function sendMouse(action, extra = {}) {
+  toast.textContent = "A enviar comando do rato…";
+  try {
+    const response = await fetch("/api/action", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({action, csrf: CSRF, ...extra})
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Falha no comando");
+    toast.textContent = "✓ " + data.message;
+  } catch (err) {
+    toast.textContent = "Erro: " + err.message;
+  }
+}
+document.querySelectorAll("[data-action]").forEach(button => {
+  button.addEventListener("click", () => sendAction(button.dataset.action));
+});
+document.getElementById("leftClick").addEventListener("click", () => sendMouse("mouse_click"));
+document.getElementById("rightClick").addEventListener("click", () => sendMouse("mouse_right"));
+document.getElementById("doubleClick").addEventListener("click", () => sendMouse("mouse_double"));
+
+const touchpad = document.getElementById("touchpad");
+let lastPoint = null;
+let moveX = 0, moveY = 0, moveFrame = null;
+touchpad.addEventListener("pointerdown", e => {
+  e.preventDefault();
+  touchpad.setPointerCapture(e.pointerId);
+  lastPoint = {x: e.clientX, y: e.clientY};
+  touchpad.classList.add("touching");
+});
+touchpad.addEventListener("pointermove", e => {
+  if (!lastPoint) return;
+  e.preventDefault();
+  const dx = e.clientX - lastPoint.x;
+  const dy = e.clientY - lastPoint.y;
+  lastPoint = {x: e.clientX, y: e.clientY};
+  moveX += dx * 2.2;
+  moveY += dy * 2.2;
+  if (!moveFrame) {
+    moveFrame = setTimeout(async () => {
+      const sendX = Math.max(-180, Math.min(180, Math.round(moveX)));
+      const sendY = Math.max(-180, Math.min(180, Math.round(moveY)));
+      moveX = 0; moveY = 0; moveFrame = null;
+      if (sendX || sendY) await sendMouse("mouse_move", {dx: sendX, dy: sendY});
+    }, 25);
+  }
+});
+function stopTouch(e) {
+  lastPoint = null;
+  touchpad.classList.remove("touching");
+}
+touchpad.addEventListener("pointerup", stopTouch);
+touchpad.addEventListener("pointercancel", stopTouch);
+touchpad.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("keydown", e => {
+  if (e.target.matches("input,textarea")) return;
+  const map = {ArrowUp:"up",ArrowDown:"down",ArrowLeft:"left",ArrowRight:"right",Enter:"enter",Escape:"esc"};
+  if (map[e.key]) { e.preventDefault(); sendAction(map[e.key]); }
+});
+fetch("/api/status").then(r => r.json()).then(d => {
+  document.getElementById("statusText").textContent = d.pyautogui ? "Ligado · " + d.computer : "Instalação incompleta";
+}).catch(() => {});
+</script>
+</body></html>
